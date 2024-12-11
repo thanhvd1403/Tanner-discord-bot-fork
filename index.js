@@ -16,7 +16,7 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command);
 }
 
-console.log(client.commands);
+// console.log(client.commands);
 
 const player = new Player(client);
 
@@ -58,11 +58,11 @@ player.events.on('emptyChannel', queue => {
     queue.metadata.channel.send('❌ | Nobody is in the voice channel, leaving...');
 });
 
-player.events.on('emptyQueue', queue => {
-    queue.metadata.channel.send('✅ | Queue finished!');
-    // Delete queue and disconnect from voice channel
-    queue.delete();
-});
+// player.events.on('emptyQueue', queue => {
+//     queue.metadata.channel.send('✅ | Queue finished!');
+//     // Delete queue and disconnect from voice channel
+//     queue.delete();
+// });
 
 player.events.on('error', (queue, error) => {
     console.log(`[${queue.guild.name}] Error emitted from the connection: ${error.message}`);
@@ -85,7 +85,7 @@ player.events.on('playerError', (queue, error) => {
 client.on('ready', function () {
     console.log('Ready!');
     client.user.presence.set({
-        activities: [{name: config.activity, type: Number(config.activityType)}],
+        activities: [{name: config.activityName, type: Number(config.activityType)}],
         status: Discord.Status.Ready,
     });
 });
