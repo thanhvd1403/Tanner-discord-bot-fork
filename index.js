@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const {YoutubeiExtractor} = require('discord-player-youtubei');
 const fs = require('fs');
 const Discord = require('discord.js');
 const Client = require('./client/Client');
@@ -20,7 +21,7 @@ for (const file of commandFiles) {
 
 const player = new Player(client);
 
-player.extractors.loadDefault().then(r => console.log('Extractors loaded successfully'));
+player.extractors.register(YoutubeiExtractor, {}).then(r => console.log('Extractors loaded successfully'));
 
 // Still needs to be refactored for 0.6
 /*player.events.on('connection', (queue) => {
