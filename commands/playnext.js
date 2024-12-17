@@ -22,6 +22,14 @@ module.exports = {
 
             await interaction.deferReply();
 
+            try {
+                if (!queue.connection) await queue.connect(interaction.member.voice.channel);
+            } catch {
+                return void interaction.followUp({
+                    content: '🤷  |  Không có nhạc đang phát!',
+                });
+            }
+
             const player = useMainPlayer();
             const query = interaction.options.getString('query');
             const searchResult = await player
@@ -35,21 +43,20 @@ module.exports = {
 
             const queue = useQueue(interaction.guild.id);
 
-            try {
-                if (!queue.connection) await queue.connect(interaction.member.voice.channel);
-            } catch {
-                return void interaction.followUp({
-                    content: '🤕  |  Không vào voice được!',
-                });
-            }
-
-            await interaction.followUp({
-                content: `⏱  |  Đang thêm ${searchResult.playlist ? 'playlist' : 'bài hát'}...`,
-            });
             searchResult.playlist
                 ? queue.node.insert(searchResult.tracks, 0)
                 : queue.node.insert(searchResult.tracks[0], 0);
             if (!queue.currentTrack) await player.play();
+
+            if (searchResult.playlist) {
+                await interaction.followUp({
+                    content: `🎶  |  Đã thêm **${searchResult.tracks.length}** bài vào hàng chờ!`,
+                });
+            } else {
+                await interaction.followUp({
+                    content: `🎶  |  Đã thêm **${searchResult.tracks[0].title}** vào hàng chờ!`,
+                });
+            }
         } catch (error) {
             console.log(error);
             await interaction.followUp({

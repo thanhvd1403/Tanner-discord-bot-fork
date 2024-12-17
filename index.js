@@ -39,24 +39,24 @@ player.extractors.register(YoutubeiExtractor, {}).then(r => console.log('Extract
     });
 });*/
 
-player.events.on('audioTrackAdd', (queue, song) => {
-    queue.metadata.channel.send(`🎶  |  Đã thêm **${song.title}** vào hàng chờ!`);
-});
+// player.events.on('audioTrackAdd', (queue, song) => {
+//     queue.metadata.channel.send(`🎶  |  Đã thêm **${song.title}** vào hàng chờ!`);
+// });
 
 player.events.on('playerStart', (queue, track) => {
     queue.metadata.channel.send(`▶️  |  Đang phát: **${track.title}**!`);
 });
 
-player.events.on('audioTracksAdd', (queue, track) => {
-    queue.metadata.channel.send(`🎶  |  Đã thêm playlist vào hàng chờ!`);
-});
+// player.events.on('audioTracksAdd', (queue, track) => {
+//     queue.metadata.channel.send(`🎶  |  Đã thêm playlist vào hàng chờ!`);
+// });
 
 player.events.on('disconnect', queue => {
     queue.metadata.channel.send('🥹  |  Em bị đuổi khỏi voice, xoá queue đây!');
 });
 
 player.events.on('emptyChannel', queue => {
-    queue.metadata.channel.send('🫥  |  Không thấy ai trong voice nữa, em đi đây...');
+    queue.metadata.channel.send('😶‍🌫️  |  Không thấy ai trong voice nữa, em đi đây...');
 });
 
 // player.events.on('emptyQueue', queue => {

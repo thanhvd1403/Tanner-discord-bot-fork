@@ -18,6 +18,6 @@ module.exports = {
                 content: '🤷  |  Không có nhạc đang phát!',
             });
         queue.delete();
-        return void interaction.followUp({content: '🦦  Đã dừng  |  Cảm ơn anh chị đã tin tưởng em!!  🥰'});
+        return void interaction.followUp({content: '⏹️  Đã dừng  |  Hết nhạc rồi em đi đây! 🦦'});
     },
 };

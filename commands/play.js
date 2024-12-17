@@ -1,5 +1,5 @@
 const {ApplicationCommandOptionType} = require('discord.js');
-const {useMainPlayer} = require('discord-player');
+const {useMainPlayer, useQueue} = require('discord-player');
 const {isInVoiceChannel} = require('../utils/voicechannel');
 
 module.exports = {
@@ -43,14 +43,20 @@ module.exports = {
                         leaveOnEmpty: true,
                         leaveOnEnd: false,
                         bufferingTimeout: 0,
-                        volume: config.get('volume') || 10,
+                        volume: config.get('volume') || 50,
                         //defaultFFmpegFilters: ['lofi', 'bassboost', 'normalizer']
                     },
                 });
 
-                await interaction.followUp({
-                    content: `⏱  |  Đang thêm ${searchResult.playlist ? 'playlist' : 'bài hát'}...`,
-                });
+                if (searchResult.playlist) {
+                    await interaction.followUp({
+                        content: `🎶  |  Đã thêm **${searchResult.tracks.length}** bài vào hàng chờ!`,
+                    });
+                } else {
+                    await interaction.followUp({
+                        content: `🎶  |  Đã thêm **${searchResult.tracks[0].title}** vào hàng chờ!`,
+                    });
+                }
             } catch (error) {
                 await interaction.editReply({
                     content: 'Có lỗi gì rồi 🥲!',
