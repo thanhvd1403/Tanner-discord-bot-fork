@@ -1,25 +1,26 @@
-const {GuildMember} = require('discord.js')
-const {useQueue} = require('discord-player')
-const {isInVoiceChannel} = require("../utils/voicechannel");
+const {GuildMember} = require('discord.js');
+const {useQueue} = require('discord-player');
+const {isInVoiceChannel} = require('../utils/voicechannel');
 
 module.exports = {
     name: 'skip',
-    description: 'Skip a song!',
+    description: 'Bỏ qua bài đang phát',
     async execute(interaction) {
-        const inVoiceChannel = isInVoiceChannel(interaction)
+        const inVoiceChannel = isInVoiceChannel(interaction);
         if (!inVoiceChannel) {
-            return
+            return;
         }
 
         await interaction.deferReply();
 
-        const queue = useQueue(interaction.guild.id)
-        if (!queue || !queue.currentTrack) return void interaction.followUp({content: '❌ | No music is being played!'});
+        const queue = useQueue(interaction.guild.id);
+        if (!queue || !queue.currentTrack)
+            return void interaction.followUp({content: '🤷  |  Không có nhạc đang phát!'});
         const currentTrack = queue.currentTrack;
 
-        const success = queue.node.skip()
+        const success = queue.node.skip();
         return void interaction.followUp({
-            content: success ? `✅ | Skipped **${currentTrack}**!` : '❌ | Something went wrong!',
+            content: success ? `✅  |  Bỏ qua **${currentTrack}**!` : 'Có lỗi gì rồi 🥲!',
         });
     },
 };

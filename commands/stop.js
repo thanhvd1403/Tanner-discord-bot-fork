@@ -15,9 +15,9 @@ module.exports = {
         const queue = useQueue(interaction.guild.id);
         if (!queue || !queue.currentTrack)
             return void interaction.followUp({
-                content: '❌ | Đang không phát nhạc!',
+                content: '🤷  |  Không có nhạc đang phát!',
             });
         queue.delete();
-        return void interaction.followUp({content: '🛑  Đã dừng  |  Cảm ơn anh chị đã tin tưởng em!!  🥰'});
+        return void interaction.followUp({content: '🦦  Đã dừng  |  Cảm ơn anh chị đã tin tưởng em!!  🥰'});
     },
 };

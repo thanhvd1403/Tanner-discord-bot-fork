@@ -4,12 +4,12 @@ const {isInVoiceChannel} = require('../utils/voicechannel');
 
 module.exports = {
     name: 'play',
-    description: 'Play a song in your channel!',
+    description: 'Phát nhạc!',
     options: [
         {
             name: 'query',
             type: ApplicationCommandOptionType.String,
-            description: 'The song you want to play',
+            description: 'Tên bài / Link Diu túp, Spotify, SC... / Link playlist',
             required: true,
         },
     ],
@@ -26,7 +26,8 @@ module.exports = {
             const player = useMainPlayer();
             const query = interaction.options.getString('query');
             const searchResult = await player.search(query);
-            if (!searchResult.hasTracks()) return void interaction.followUp({content: 'No results were found!'});
+            if (!searchResult.hasTracks())
+                return void interaction.followUp({content: '🧐  |  Không có kết quả tìm kiếm!'});
 
             try {
                 const config = new Conf({projectName: 'volume'});
@@ -48,17 +49,17 @@ module.exports = {
                 });
 
                 await interaction.followUp({
-                    content: `⏱ | Loading your ${searchResult.playlist ? 'playlist' : 'track'}...`,
+                    content: `⏱  |  Đang thêm ${searchResult.playlist ? 'playlist' : 'bài hát'}...`,
                 });
             } catch (error) {
                 await interaction.editReply({
-                    content: 'An error has occurred!',
+                    content: 'Có lỗi gì rồi 🥲!',
                 });
                 return console.log(error);
             }
         } catch (error) {
             await interaction.reply({
-                content: 'There was an error trying to execute that command: ' + error.message,
+                content: '😵 Xếp ơi có vấn đề: ' + error.message,
             });
         }
     },

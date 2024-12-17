@@ -40,23 +40,23 @@ player.extractors.register(YoutubeiExtractor, {}).then(r => console.log('Extract
 });*/
 
 player.events.on('audioTrackAdd', (queue, song) => {
-    queue.metadata.channel.send(`🎶 | Song **${song.title}** added to the queue!`);
+    queue.metadata.channel.send(`🎶  |  Đã thêm **${song.title}** vào hàng chờ!`);
 });
 
 player.events.on('playerStart', (queue, track) => {
-    queue.metadata.channel.send(`▶ | Started playing: **${track.title}**!`);
+    queue.metadata.channel.send(`▶️  |  Đang phát: **${track.title}**!`);
 });
 
 player.events.on('audioTracksAdd', (queue, track) => {
-    queue.metadata.channel.send(`🎶 | Tracks have been queued!`);
+    queue.metadata.channel.send(`🎶  |  Đã thêm playlist vào hàng chờ!`);
 });
 
 player.events.on('disconnect', queue => {
-    queue.metadata.channel.send('❌ | I was manually disconnected from the voice channel, clearing queue!');
+    queue.metadata.channel.send('🥹  |  Em bị đuổi khỏi voice, xoá queue đây!');
 });
 
 player.events.on('emptyChannel', queue => {
-    queue.metadata.channel.send('❌ | Nobody is in the voice channel, leaving...');
+    queue.metadata.channel.send('🫥  |  Không thấy ai trong voice nữa, em đi đây...');
 });
 
 // player.events.on('emptyQueue', queue => {
@@ -83,8 +83,29 @@ player.events.on('playerError', (queue, error) => {
     console.log(error);
 });*/
 
-client.on('ready', function () {
-    console.log('Ready!');
+client.on('ready', async function () {
+    console.log(`Logged in as ${client.user.tag}`);
+
+    try {
+        // Delete all guild-specific commands for each guild
+        const guilds = await client.guilds.fetch();
+
+        for (const guildData of guilds.values()) {
+            try {
+                const guild = await guildData.fetch();
+                console.log('Setting commands for guild:', guild.name);
+                await guild.commands.set(client.commands);
+                console.log('Deployed commands for guild:', guild.name);
+            } catch (error) {
+                console.error(`Error processing guild ${guildData.id}:`, error);
+            }
+        }
+
+        console.log('Ready!');
+    } catch (error) {
+        console.error('Error fetching guild data:', error);
+    }
+
     client.user.presence.set({
         activities: [{name: config.activityName, type: Number(config.activityType)}],
         status: Discord.Status.Ready,
@@ -128,7 +149,7 @@ client.on('interactionCreate', async interaction => {
     } catch (error) {
         console.error(error);
         await interaction.followUp({
-            content: 'There was an error trying to execute that command!',
+            content: 'index.js: Có lỗi khi đang chạy lệnh 🥲!',
         });
     }
 });

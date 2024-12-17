@@ -1,58 +1,59 @@
 const {GuildMember, ApplicationCommandOptionType} = require('discord.js');
 const {QueryType, useQueue, useMainPlayer} = require('discord-player');
-const {isInVoiceChannel} = require("../utils/voicechannel");
+const {isInVoiceChannel} = require('../utils/voicechannel');
 
 module.exports = {
-    name: 'playtop',
-    description: 'Play a song before the next in your channel!',
+    name: 'playnext',
+    description: 'Phát nhạc ngay sau bài hiện tại',
     options: [
         {
             name: 'query',
             type: ApplicationCommandOptionType.String,
-            description: 'The song you want to play',
+            description: 'Tên bài / Link Diu túp, Spotify, SC... / Link playlist',
             required: true,
         },
     ],
     async execute(interaction) {
         try {
-            const inVoiceChannel = isInVoiceChannel(interaction)
+            const inVoiceChannel = isInVoiceChannel(interaction);
             if (!inVoiceChannel) {
-                return
+                return;
             }
 
             await interaction.deferReply();
 
-            const player = useMainPlayer()
+            const player = useMainPlayer();
             const query = interaction.options.getString('query');
             const searchResult = await player
                 .search(query, {
                     requestedBy: interaction.user,
                     searchEngine: QueryType.AUTO,
                 })
-                .catch(() => {
-                });
+                .catch(() => {});
             if (!searchResult || !searchResult.tracks.length)
-                return void interaction.followUp({content: 'No results were found!'});
+                return void interaction.followUp({content: '🧐  |  Không có kết quả tìm kiếm!'});
 
-            const queue = useQueue(interaction.guild.id)
+            const queue = useQueue(interaction.guild.id);
 
             try {
                 if (!queue.connection) await queue.connect(interaction.member.voice.channel);
             } catch {
                 return void interaction.followUp({
-                    content: 'Could not join your voice channel!',
+                    content: '🤕  |  Không vào voice được!',
                 });
             }
 
             await interaction.followUp({
-                content: `⏱ | Loading your ${searchResult.playlist ? 'playlist' : 'track'}...`,
+                content: `⏱  |  Đang thêm ${searchResult.playlist ? 'playlist' : 'bài hát'}...`,
             });
-            searchResult.playlist ? queue.node.insert(searchResult.tracks, 0) : queue.node.insert(searchResult.tracks[0], 0);
+            searchResult.playlist
+                ? queue.node.insert(searchResult.tracks, 0)
+                : queue.node.insert(searchResult.tracks[0], 0);
             if (!queue.currentTrack) await player.play();
         } catch (error) {
             console.log(error);
             await interaction.followUp({
-                content: 'There was an error trying to execute that command: ' + error.message,
+                content: '😵 Xếp ơi có vấn đề: ' + error.message,
             });
         }
     },

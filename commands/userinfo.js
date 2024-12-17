@@ -2,12 +2,12 @@ const {ApplicationCommandOptionType} = require('discord.js');
 
 module.exports = {
     name: 'userinfo',
-    description: 'Get information about a user.',
+    description: 'Xem thông tin của người dùng',
     options: [
         {
             name: 'user',
             type: ApplicationCommandOptionType.User,
-            description: 'The user you want to get info about',
+            description: 'Người dùng Discord',
             required: true,
         },
     ],

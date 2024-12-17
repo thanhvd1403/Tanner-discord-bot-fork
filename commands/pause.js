@@ -1,25 +1,25 @@
 const {GuildMember} = require('discord.js');
-const {useQueue} = require("discord-player");
-const {isInVoiceChannel} = require("../utils/voicechannel");
+const {useQueue} = require('discord-player');
+const {isInVoiceChannel} = require('../utils/voicechannel');
 
 module.exports = {
     name: 'pause',
-    description: 'Pause current song!',
+    description: 'Tạm dừng nhạc đang phát',
     async execute(interaction) {
-        const inVoiceChannel = isInVoiceChannel(interaction)
+        const inVoiceChannel = isInVoiceChannel(interaction);
         if (!inVoiceChannel) {
-            return
+            return;
         }
 
         await interaction.deferReply();
-        const queue = useQueue(interaction.guild.id)
+        const queue = useQueue(interaction.guild.id);
         if (!queue || !queue.currentTrack)
             return void interaction.followUp({
-                content: '❌ | No music is being played!',
+                content: '🤷  |  Không có nhạc đang phát!',
             });
-        const success = queue.node.pause()
+        const success = queue.node.pause();
         return void interaction.followUp({
-            content: success ? '⏸ | Paused!' : '❌ | Something went wrong!',
+            content: success ? '⏸  |  Tạm dừng!' : 'Có lỗi gì rồi 🥲!',
         });
     },
 };

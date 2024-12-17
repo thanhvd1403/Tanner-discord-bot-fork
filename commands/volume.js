@@ -4,12 +4,12 @@ const {isInVoiceChannel} = require('../utils/voicechannel');
 
 module.exports = {
     name: 'volume',
-    description: 'Change the volume!',
+    description: 'Chỉnh âm lượng',
     options: [
         {
             name: 'volume',
             type: ApplicationCommandOptionType.Integer,
-            description: 'Number between 0-200',
+            description: 'Âm lượng từ 0-200',
             required: true,
         },
     ],
@@ -32,7 +32,7 @@ module.exports = {
         if (inVoiceChannel && queue && queue.currentTrack) queue.node.setVolume(volume);
 
         return void interaction.followUp({
-            content: `🔊 | Volume set to ${volume}!`,
+            content: `🔊  |  Chỉnh âm lượng về mức ${volume}!`,
         });
     },
 };

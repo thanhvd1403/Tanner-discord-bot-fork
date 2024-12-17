@@ -1,27 +1,27 @@
 const {GuildMember, ApplicationCommandOptionType} = require('discord.js');
 const {QueueRepeatMode, useQueue} = require('discord-player');
-const {isInVoiceChannel} = require("../utils/voicechannel");
+const {isInVoiceChannel} = require('../utils/voicechannel');
 
 module.exports = {
     name: 'loop',
-    description: 'Sets loop mode',
+    description: 'Chỉnh chế độ lặp lại',
     options: [
         {
             name: 'mode',
             type: ApplicationCommandOptionType.Integer,
-            description: 'Loop type',
+            description: 'Chế độ lặp',
             required: true,
             choices: [
                 {
-                    name: 'Off',
+                    name: 'Tắt',
                     value: QueueRepeatMode.OFF,
                 },
                 {
-                    name: 'Track',
+                    name: 'Lặp 1 bài',
                     value: QueueRepeatMode.TRACK,
                 },
                 {
-                    name: 'Queue',
+                    name: 'Lặp hàng chờ',
                     value: QueueRepeatMode.QUEUE,
                 },
                 {
@@ -33,29 +33,29 @@ module.exports = {
     ],
     async execute(interaction) {
         try {
-            const inVoiceChannel = isInVoiceChannel(interaction)
+            const inVoiceChannel = isInVoiceChannel(interaction);
             if (!inVoiceChannel) {
-                return
+                return;
             }
 
             await interaction.deferReply();
 
-            const queue = useQueue(interaction.guild.id)
+            const queue = useQueue(interaction.guild.id);
             if (!queue || !queue.currentTrack) {
-                return void interaction.followUp({content: '❌ | No music is being played!'});
+                return void interaction.followUp({content: '🤷  |  Không có nhạc đang phát!'});
             }
 
             const loopMode = interaction.options.getInteger('mode');
             queue.setRepeatMode(loopMode);
-            const mode = loopMode === QueueRepeatMode.TRACK ? '🔂' : loopMode === QueueRepeatMode.QUEUE ? '🔁' : '▶';
+            const mode = loopMode === QueueRepeatMode.TRACK ? '🔂' : loopMode === QueueRepeatMode.QUEUE ? '🔁' : '▶️';
 
             return void interaction.followUp({
-                content: `${mode} | Updated loop mode!`,
+                content: `${mode}  |  Đã cập nhật chế độ lặp!`,
             });
         } catch (error) {
             console.log(error);
             return void interaction.followUp({
-                content: 'There was an error trying to execute that command: ' + error.message,
+                content: '😵 Xếp ơi có vấn đề: ' + error.message,
             });
         }
     },
