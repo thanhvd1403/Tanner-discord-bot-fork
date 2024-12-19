@@ -48,17 +48,22 @@ const player = new Player(client);
     });
 });*/
 
-// player.events.on('audioTrackAdd', (queue, song) => {
-//     queue.metadata.channel.send(`🎶  |  Đã thêm **${song.title}** vào hàng chờ!`);
-// });
-
+// Record the last play message and delete it when the track ends
+let lastPlayMessage = null;
 player.events.on('playerStart', (queue, track) => {
-    queue.metadata.channel.send(createStatusEmbed(`🎧`, `Đang phát: **${track.cleanTitle} - ${track.author}**`));
+    queue.metadata.channel
+        .send(createStatusEmbed(`🎧`, `Đang phát: **${track.cleanTitle} - ${track.author}**`))
+        .then(message => (lastPlayMessage = message))
+        .catch(console.error);
 });
 
-// player.events.on('audioTracksAdd', (queue, track) => {
-//     queue.metadata.channel.send(`🎶  |  Đã thêm playlist vào hàng chờ!`);
-// });
+player.events.on('playerFinish', () => {
+    if (lastPlayMessage) lastPlayMessage.delete().catch(console.error);
+});
+
+player.events.on('queueDelete', () => {
+    if (lastPlayMessage) lastPlayMessage.delete().catch(console.error);
+});
 
 player.events.on('disconnect', queue => {
     queue.metadata.channel.send(createEmbed('🥹', 'Em bị đuổi khỏi voice rồi, xoá queue đây!'));

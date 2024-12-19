@@ -28,7 +28,7 @@ module.exports = {
             const query = interaction.options.getString('query');
             const searchResult = await player.search(query);
             if (!searchResult.hasTracks())
-                return void interaction.followUp(createEmbed('🧐', 'Không có kết quả tìm kiếm!'));
+                return void interaction.followUp(createEmbed('🧐', 'Không có kết quả tìm kiếm!', '', true));
 
             try {
                 const config = new Conf({projectName: 'volume'});

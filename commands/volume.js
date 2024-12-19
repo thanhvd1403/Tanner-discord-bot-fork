@@ -10,7 +10,7 @@ module.exports = {
         {
             name: 'volume',
             type: ApplicationCommandOptionType.Integer,
-            description: 'Âm lượng từ 0-200',
+            description: 'Âm lượng từ 0-200 (mặc định 30)',
             required: true,
         },
     ],

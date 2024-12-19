@@ -38,7 +38,7 @@ module.exports = {
                 })
                 .catch(() => {});
             if (!searchResult || !searchResult.tracks.length)
-                return void interaction.followUp(createEmbed('🧐', 'Không có kết quả tìm kiếm!'));
+                return void interaction.followUp(createEmbed('🧐', 'Không có kết quả tìm kiếm!', '', true));
 
             const queue = useQueue(interaction.guild.id);
 
