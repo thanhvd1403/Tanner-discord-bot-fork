@@ -1,6 +1,7 @@
 const {GuildMember, ApplicationCommandOptionType} = require('discord.js');
 const {useQueue} = require('discord-player');
-const {isInVoiceChannel} = require('../utils/voicechannel');
+const {isInVoiceChannel} = require('../utils/VoiceChannel');
+const {createEmbed} = require('../utils/EmbedUtils');
 
 module.exports = {
     name: 'remove',
@@ -22,12 +23,14 @@ module.exports = {
         await interaction.deferReply();
         const queue = useQueue(interaction.guild.id);
         if (!queue || !queue.currentTrack)
-            return void interaction.followUp({content: '🤷  |  Không có nhạc đang phát!'});
+            return void interaction.followUp(createEmbed('🤷', 'Không có nhạc đang phát!'));
+
         const number = interaction.options.getInteger('number') - 1;
-        if (number > queue.tracks.size) return void interaction.followUp({content: '😡  |  Số này to quá!'});
+        if (number > queue.tracks.size) return void interaction.followUp(createEmbed('😡', 'Số này to quá!'));
+
         const removedTrack = queue.node.remove(number);
-        return void interaction.followUp({
-            content: removedTrack ? `✅  |  Đã xoá bài **${removedTrack}**!` : 'Có lỗi gì rồi 🥲!',
-        });
+        return void interaction.followUp(
+            removedTrack ? createEmbed(`✅`, `Đã xoá bài **${removedTrack.cleanTitle}**!`) : 'Có lỗi gì rồi 🥲!',
+        );
     },
 };

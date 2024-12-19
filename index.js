@@ -6,6 +6,7 @@ const Discord = require('discord.js');
 const Client = require('./client/Client');
 const config = require('./config.json');
 const {Player} = require('discord-player');
+const {createStatusEmbed, createEmbed} = require('./utils/EmbedUtils');
 
 const client = new Client();
 client.commands = new Discord.Collection();
@@ -44,7 +45,7 @@ player.extractors.register(YoutubeiExtractor, {}).then(r => console.log('Extract
 // });
 
 player.events.on('playerStart', (queue, track) => {
-    queue.metadata.channel.send(`▶️  |  Đang phát: **${track.title}**!`);
+    queue.metadata.channel.send(createStatusEmbed(`🎧`, `Đang phát: **${track.cleanTitle}**`));
 });
 
 // player.events.on('audioTracksAdd', (queue, track) => {
@@ -52,11 +53,11 @@ player.events.on('playerStart', (queue, track) => {
 // });
 
 player.events.on('disconnect', queue => {
-    queue.metadata.channel.send('🥹  |  Em bị đuổi khỏi voice, xoá queue đây!');
+    queue.metadata.channel.send(createEmbed('🥹', 'Em bị đuổi khỏi voice rồi, xoá queue đây!'));
 });
 
 player.events.on('emptyChannel', queue => {
-    queue.metadata.channel.send('😶‍🌫️  |  Không thấy ai trong voice nữa, em đi đây...');
+    queue.metadata.channel.send(createEmbed('😶‍🌫️', 'Không thấy ai trong voice nữa, em đi đây...'));
 });
 
 // player.events.on('emptyQueue', queue => {

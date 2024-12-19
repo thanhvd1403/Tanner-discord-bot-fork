@@ -1,6 +1,7 @@
 const {GuildMember} = require('discord.js');
 const {useQueue} = require('discord-player');
-const {isInVoiceChannel} = require('../utils/voicechannel');
+const {isInVoiceChannel} = require('../utils/VoiceChannel');
+const {createEmbed} = require('../utils/EmbedUtils');
 
 module.exports = {
     name: 'pause',
@@ -14,12 +15,8 @@ module.exports = {
         await interaction.deferReply();
         const queue = useQueue(interaction.guild.id);
         if (!queue || !queue.currentTrack)
-            return void interaction.followUp({
-                content: '🤷  |  Không có nhạc đang phát!',
-            });
+            return void interaction.followUp(createEmbed('🤷', 'Không có nhạc đang phát!'));
         const success = queue.node.pause();
-        return void interaction.followUp({
-            content: success ? '⏸  |  Tạm dừng!' : 'Có lỗi gì rồi 🥲!',
-        });
+        return void interaction.followUp(success ? createEmbed('⏸️', 'Tạm dừng!') : 'Có lỗi gì rồi 🥲!');
     },
 };

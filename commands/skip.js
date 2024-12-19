@@ -1,6 +1,5 @@
-const {GuildMember} = require('discord.js');
 const {useQueue} = require('discord-player');
-const {isInVoiceChannel} = require('../utils/voicechannel');
+const {isInVoiceChannel} = require('../utils/VoiceChannel');
 
 module.exports = {
     name: 'skip',
@@ -15,12 +14,12 @@ module.exports = {
 
         const queue = useQueue(interaction.guild.id);
         if (!queue || !queue.currentTrack)
-            return void interaction.followUp({content: '🤷  |  Không có nhạc đang phát!'});
+            return void interaction.followUp(createEmbed('🤷', 'Không có nhạc đang phát!'));
         const currentTrack = queue.currentTrack;
 
         const success = queue.node.skip();
-        return void interaction.followUp({
-            content: success ? `✅  |  Bỏ qua **${currentTrack}**!` : 'Có lỗi gì rồi 🥲!',
-        });
+        return void interaction.followUp(
+            success ? createEmbed(`✅`, `Bỏ qua **${currentTrack.cleanTitle}**!`) : 'Có lỗi gì rồi 🥲!',
+        );
     },
 };

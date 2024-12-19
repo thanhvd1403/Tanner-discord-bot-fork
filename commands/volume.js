@@ -1,6 +1,7 @@
 const {ApplicationCommandOptionType} = require('discord.js');
 const {useQueue} = require('discord-player');
-const {isInVoiceChannel} = require('../utils/voicechannel');
+const {isInVoiceChannel} = require('../utils/VoiceChannel');
+const {createEmbed} = require('../utils/EmbedUtils');
 
 module.exports = {
     name: 'volume',
@@ -31,8 +32,6 @@ module.exports = {
         const inVoiceChannel = isInVoiceChannel(interaction);
         if (inVoiceChannel && queue && queue.currentTrack) queue.node.setVolume(volume);
 
-        return void interaction.followUp({
-            content: `🔊  |  Chỉnh âm lượng về mức ${volume}!`,
-        });
+        return void interaction.followUp(createEmbed(`🔊`, `Chỉnh âm lượng về mức ${volume}!`));
     },
 };

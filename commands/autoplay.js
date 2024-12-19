@@ -1,5 +1,6 @@
 const {QueueRepeatMode, useQueue} = require('discord-player');
-const {isInVoiceChannel} = require('../utils/voicechannel');
+const {isInVoiceChannel} = require('../utils/VoiceChannel');
+const {createEmbed} = require('../utils/EmbedUtils');
 
 module.exports = {
     name: 'autoplay',
@@ -14,7 +15,7 @@ module.exports = {
 
             const queue = useQueue(interaction.guild.id);
             if (!queue || !queue.currentTrack) {
-                return void interaction.followUp({content: '🤷  |  Không có nhạc đang phát!'});
+                return void interaction.followUp(createEmbed('🤷', 'Không có nhạc đang phát!'));
             }
 
             // Toggle autoplay mode
@@ -26,9 +27,7 @@ module.exports = {
                 emoji: setMode === QueueRepeatMode.AUTOPLAY ? '✅' : '❎',
                 state: setMode === QueueRepeatMode.AUTOPLAY ? 'bật' : 'tắt',
             };
-            return void interaction.followUp({
-                content: `${modeString.emoji}  |  Đã ${modeString.state} autoplay`,
-            });
+            return void interaction.followUp(createEmbed(modeString.emoji, `Đã ${modeString.state} autoplay`));
         } catch (error) {
             console.log(error);
             await interaction.followUp({

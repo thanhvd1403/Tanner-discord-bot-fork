@@ -1,6 +1,7 @@
-const {GuildMember, ApplicationCommandOptionType} = require('discord.js');
+const {ApplicationCommandOptionType} = require('discord.js');
 const {QueueRepeatMode, useQueue} = require('discord-player');
-const {isInVoiceChannel} = require('../utils/voicechannel');
+const {isInVoiceChannel} = require('../utils/VoiceChannel');
+const {createEmbed} = require('../utils/EmbedUtils');
 
 module.exports = {
     name: 'loop',
@@ -42,16 +43,14 @@ module.exports = {
 
             const queue = useQueue(interaction.guild.id);
             if (!queue || !queue.currentTrack) {
-                return void interaction.followUp({content: '🤷  |  Không có nhạc đang phát!'});
+                return void interaction.followUp(createEmbed('🤷', 'Không có nhạc đang phát!'));
             }
 
             const loopMode = interaction.options.getInteger('mode');
             queue.setRepeatMode(loopMode);
             const mode = loopMode === QueueRepeatMode.TRACK ? '🔂' : loopMode === QueueRepeatMode.QUEUE ? '🔁' : '▶️';
 
-            return void interaction.followUp({
-                content: `${mode}  |  Đã cập nhật chế độ lặp!`,
-            });
+            return void interaction.followUp(createEmbed(mode, 'Đã cập nhật chế độ lặp!'));
         } catch (error) {
             console.log(error);
             return void interaction.followUp({

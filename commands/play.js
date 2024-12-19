@@ -1,6 +1,7 @@
 const {ApplicationCommandOptionType} = require('discord.js');
-const {useMainPlayer, useQueue} = require('discord-player');
-const {isInVoiceChannel} = require('../utils/voicechannel');
+const {useMainPlayer} = require('discord-player');
+const {isInVoiceChannel} = require('../utils/VoiceChannel');
+const {createEmbed} = require('../utils/EmbedUtils');
 
 module.exports = {
     name: 'play',
@@ -27,7 +28,7 @@ module.exports = {
             const query = interaction.options.getString('query');
             const searchResult = await player.search(query);
             if (!searchResult.hasTracks())
-                return void interaction.followUp({content: '🧐  |  Không có kết quả tìm kiếm!'});
+                return void interaction.followUp(createEmbed('🧐', 'Không có kết quả tìm kiếm!'));
 
             try {
                 const config = new Conf({projectName: 'volume'});
@@ -49,13 +50,13 @@ module.exports = {
                 });
 
                 if (searchResult.playlist) {
-                    await interaction.followUp({
-                        content: `🎶  |  Đã thêm **${searchResult.tracks.length}** bài vào hàng chờ!`,
-                    });
+                    await interaction.followUp(
+                        createEmbed(`🎼`, `Đã thêm **${searchResult.tracks.length}** bài vào hàng chờ`),
+                    );
                 } else {
-                    await interaction.followUp({
-                        content: `🎶  |  Đã thêm **${searchResult.tracks[0].title}** vào hàng chờ!`,
-                    });
+                    await interaction.followUp(
+                        createEmbed(`🎼`, `Đã thêm **${searchResult.tracks[0].cleanTitle}** vào hàng chờ`),
+                    );
                 }
             } catch (error) {
                 await interaction.editReply({

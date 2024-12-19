@@ -1,6 +1,7 @@
-const {GuildMember, ApplicationCommandOptionType} = require('discord.js');
+const {ApplicationCommandOptionType} = require('discord.js');
 const {useQueue} = require('discord-player');
-const {isInVoiceChannel} = require('../utils/voicechannel');
+const {isInVoiceChannel} = require('../utils/VoiceChannel');
+const {createEmbed} = require('../utils/EmbedUtils');
 
 module.exports = {
     name: 'swap',
@@ -28,7 +29,7 @@ module.exports = {
         await interaction.deferReply();
         const queue = useQueue(interaction.guild.id);
         if (!queue || !queue.currentTrack)
-            return void interaction.followUp({content: '🤷  |  Không có nhạc đang phát!'});
+            return void interaction.followUp(createEmbed('🤷', 'Không có nhạc đang phát!'));
         const queueNumbers = [
             interaction.options.getInteger('track1') - 1,
             interaction.options.getInteger('track2') - 1,
@@ -37,16 +38,16 @@ module.exports = {
         queueNumbers.sort(function (a, b) {
             return a - b;
         });
-        if (queueNumbers[1] > queue.getSize()) return void interaction.followUp({content: '😡  |  Số này to quá!'});
+        if (queueNumbers[1] > queue.getSize()) return void interaction.followUp(createEmbed('😡', 'Số này to quá!'));
 
         try {
             const track2 = queue.node.remove(queueNumbers[1]); // Remove higher track first to avoid list order issues
             const track1 = queue.node.remove(queueNumbers[0]);
             queue.node.insert(track2, queueNumbers[0]); // Add track in lowest position first to avoid list order issues
             queue.node.insert(track1, queueNumbers[1]);
-            return void interaction.followUp({
-                content: `✅  |  Đã đổi **${track1}** & **${track2}**!`,
-            });
+            return void interaction.followUp(
+                createEmbed(`✅`, `Đã đổi **${track1.cleanTitle}** & **${track2.cleanTitle}**!`),
+            );
         } catch (error) {
             console.log(error);
             return void interaction.followUp({

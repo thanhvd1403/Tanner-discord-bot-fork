@@ -1,6 +1,6 @@
-const {GuildMember} = require('discord.js');
 const {useQueue} = require('discord-player');
-const {isInVoiceChannel} = require('../utils/voicechannel');
+const {isInVoiceChannel} = require('../utils/VoiceChannel');
+const {createEmbed} = require('../utils/EmbedUtils');
 
 module.exports = {
     name: 'shuffle',
@@ -15,17 +15,17 @@ module.exports = {
 
         const queue = useQueue(interaction.guild.id);
         if (!queue || !queue.currentTrack)
-            return void interaction.followUp({content: '🤷  |  Không có nhạc đang phát!'});
+            return void interaction.followUp(createEmbed('🤷', 'Không có nhạc đang phát!'));
 
         try {
             queue.toggleShuffle();
             const shuffleState = queue.isShuffling;
             if (shuffleState) {
-                return void interaction.followUp({
-                    content: '🔀  |  Đã bật trộn bài! Bài tiếp theo sẽ được chọn ngẫu nhiên từ hàng chờ!',
-                });
+                return void interaction.followUp(
+                    createEmbed('🔀', 'Đã bật trộn bài! Bài tiếp theo sẽ được chọn ngẫu nhiên từ hàng chờ!'),
+                );
             } else {
-                return void interaction.followUp({content: '▶️  |  Đã tắt trộn bài!'});
+                return void interaction.followUp(createEmbed('▶️  |  Đã tắt trộn bài!'));
             }
         } catch (error) {
             console.log(error);

@@ -1,6 +1,7 @@
 const {GuildMember, ApplicationCommandOptionType} = require('discord.js');
 const {QueryType, useQueue, useMainPlayer} = require('discord-player');
-const {isInVoiceChannel} = require('../utils/voicechannel');
+const {isInVoiceChannel} = require('../utils/VoiceChannel');
+const {createEmbed} = require('../utils/EmbedUtils');
 
 module.exports = {
     name: 'playnext',
@@ -25,9 +26,7 @@ module.exports = {
             try {
                 if (!queue.connection) await queue.connect(interaction.member.voice.channel);
             } catch {
-                return void interaction.followUp({
-                    content: '🤷  |  Không có nhạc đang phát!',
-                });
+                return void interaction.followUp(createEmbed('🤷', 'Không có nhạc đang phát!'));
             }
 
             const player = useMainPlayer();
@@ -39,7 +38,7 @@ module.exports = {
                 })
                 .catch(() => {});
             if (!searchResult || !searchResult.tracks.length)
-                return void interaction.followUp({content: '🧐  |  Không có kết quả tìm kiếm!'});
+                return void interaction.followUp(createEmbed('🧐', 'Không có kết quả tìm kiếm!'));
 
             const queue = useQueue(interaction.guild.id);
 
@@ -49,13 +48,13 @@ module.exports = {
             if (!queue.currentTrack) await player.play();
 
             if (searchResult.playlist) {
-                await interaction.followUp({
-                    content: `🎶  |  Đã thêm **${searchResult.tracks.length}** bài vào hàng chờ!`,
-                });
+                await interaction.followUp(
+                    createEmbed(`🎼`, `Đã thêm **${searchResult.tracks.length}** bài vào hàng chờ`),
+                );
             } else {
-                await interaction.followUp({
-                    content: `🎶  |  Đã thêm **${searchResult.tracks[0].title}** vào hàng chờ!`,
-                });
+                await interaction.followUp(
+                    createEmbed(`🎼`, `Đã thêm **${searchResult.tracks[0].cleanTitle}** vào hàng chờ`),
+                );
             }
         } catch (error) {
             console.log(error);

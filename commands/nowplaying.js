@@ -1,6 +1,7 @@
 const {GuildMember} = require('discord.js');
 const {useQueue} = require('discord-player');
-const {isInVoiceChannel} = require('../utils/voicechannel');
+const {isInVoiceChannel} = require('../utils/VoiceChannel');
+const {createEmbed} = require('../utils/EmbedUtils');
 
 module.exports = {
     name: 'nowplaying',
@@ -14,9 +15,7 @@ module.exports = {
         await interaction.deferReply();
         const queue = useQueue(interaction.guild.id);
         if (!queue || !queue.currentTrack)
-            return void interaction.followUp({
-                content: '🤷  |  Không có nhạc đang phát!',
-            });
+            return void interaction.followUp(createEmbed('🤷', 'Không có nhạc đang phát!'));
         const progress = queue.node.createProgressBar();
         const perc = queue.node.getTimestamp();
 
@@ -24,7 +23,7 @@ module.exports = {
             embeds: [
                 {
                     title: 'Đang phát',
-                    description: `🎧  |  **${queue.currentTrack.title}**! (\`${perc.progress}%\`)`,
+                    description: `🎧\u1CBC**${queue.currentTrack.title}**! (\`${perc.progress}%\`)`,
                     fields: [
                         {
                             name: '\u200b',

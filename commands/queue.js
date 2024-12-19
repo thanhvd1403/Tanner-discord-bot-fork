@@ -1,6 +1,7 @@
 const {GuildMember} = require('discord.js');
 const {useQueue} = require('discord-player');
-const {isInVoiceChannel} = require('../utils/voicechannel');
+const {isInVoiceChannel} = require('../utils/VoiceChannel');
+const {createEmbed} = require('../utils/EmbedUtils');
 
 module.exports = {
     name: 'queue',
@@ -19,22 +20,20 @@ module.exports = {
 
             // Build queue list
             queue.tracks.data.forEach((track, index) => {
-                queueStr += `${index + 1}. ${track.title}\n`;
+                queueStr += `${index + 1}. ${track.cleanTitle}\n`;
             });
 
             return void interaction.reply({
                 embeds: [
                     {
-                        title: `🎧  Đang phát  |  **${queue.currentTrack.title}**`,
+                        title: `🎧\u1CBCĐang phát: **${queue.currentTrack.title}**`,
                         description: trimString(queueStr, 4095),
                         color: 0x893f3f,
                     },
                 ],
             });
         } else {
-            return void interaction.reply({
-                content: '🤷  |  Hàng chờ hong có gì cả!',
-            });
+            return void interaction.reply(createEmbed('🤷', 'Hàng chờ hong có gì cả!'));
         }
     },
 };
