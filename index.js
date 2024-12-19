@@ -21,8 +21,16 @@ for (const file of commandFiles) {
 // console.log(client.commands);
 
 const player = new Player(client);
+(async () => {
+    await player.extractors.loadDefault();
+    console.log('Base extractors loaded successfully');
 
-player.extractors.register(YoutubeiExtractor, {}).then(r => console.log('Extractors loaded successfully'));
+    await player.extractors.unregister('youtube');
+    console.log('Unregistered base youtube extractor');
+
+    await player.extractors.register(YoutubeiExtractor, {});
+    console.log('Youtubei extractors loaded successfully');
+})();
 
 // Still needs to be refactored for 0.6
 /*player.events.on('connection', (queue) => {
