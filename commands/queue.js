@@ -16,17 +16,17 @@ module.exports = {
         if (queue != null) {
             const trimString = (str, max) => (str.length > max ? `${str.slice(0, max - 3)}...` : str);
 
-            let queueStr = `🎼 **Tiếp theo:**\n`;
+            let queueStr = `🎼\u1CBC**Tiếp theo:**\n`;
 
             // Build queue list
             queue.tracks.data.forEach((track, index) => {
-                queueStr += `${index + 1}. ${track.cleanTitle}\n`;
+                queueStr += `${index + 1}. ${track.cleanTitle} - ${track.author}\n`;
             });
 
             return void interaction.reply({
                 embeds: [
                     {
-                        title: `🎧\u1CBCĐang phát: **${queue.currentTrack.title}**`,
+                        title: `🎧\u1CBCĐang phát: **${queue.currentTrack.cleanTitle} - ${queue.currentTrack.author}**`,
                         description: trimString(queueStr, 4095),
                         color: 0x893f3f,
                     },

@@ -45,7 +45,7 @@ player.extractors.register(YoutubeiExtractor, {}).then(r => console.log('Extract
 // });
 
 player.events.on('playerStart', (queue, track) => {
-    queue.metadata.channel.send(createStatusEmbed(`🎧`, `Đang phát: **${track.cleanTitle}**`));
+    queue.metadata.channel.send(createStatusEmbed(`🎧`, `Đang phát: **${track.cleanTitle} - ${track.author}**`));
 });
 
 // player.events.on('audioTracksAdd', (queue, track) => {

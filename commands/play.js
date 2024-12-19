@@ -55,7 +55,10 @@ module.exports = {
                     );
                 } else {
                     await interaction.followUp(
-                        createEmbed(`🎼`, `Đã thêm **${searchResult.tracks[0].cleanTitle}** vào hàng chờ`),
+                        createEmbed(
+                            `🎼`,
+                            `Đã thêm **${searchResult.tracks[0].cleanTitle} - ${searchResult.tracks[0].author}** vào hàng chờ`,
+                        ),
                     );
                 }
             } catch (error) {
