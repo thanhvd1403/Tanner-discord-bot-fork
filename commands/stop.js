@@ -16,6 +16,6 @@ module.exports = {
         if (!queue || !queue.currentTrack)
             return void interaction.followUp(createEmbed('🤷', 'Không có nhạc đang phát!'));
         queue.delete();
-        return void interaction.followUp(createEmbed('⏹️', 'Đã dừng! Hết nhạc rồi em đi đây! 🦦'));
+        return void interaction.followUp(createEmbed('⏹️', 'Đã dừng! Bái bai ace! 🦦'));
     },
 };
