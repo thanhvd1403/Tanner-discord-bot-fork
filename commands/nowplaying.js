@@ -23,7 +23,7 @@ module.exports = {
             embeds: [
                 {
                     title: 'Đang phát',
-                    description: `🎧\u1CBC**${queue.currentTrack.title}**! (\`${perc.progress}%\`)`,
+                    description: `🎧\u1CBC**${queue.currentTrack.title}** (\`${perc.progress}%\`)`,
                     fields: [
                         {
                             name: '\u200b',
@@ -31,6 +31,7 @@ module.exports = {
                         },
                     ],
                     color: 0x893f3f,
+                    epherial: true,
                 },
             ],
         });

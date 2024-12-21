@@ -23,9 +23,8 @@ module.exports = {
 
             await interaction.deferReply();
 
-            try {
-                if (!queue.connection) await queue.connect(interaction.member.voice.channel);
-            } catch {
+            const queue = useQueue(interaction.guild.id);
+            if (!queue || !queue.currentTrack) {
                 return void interaction.followUp(createEmbed('🤷', 'Không có nhạc đang phát!'));
             }
 
@@ -39,8 +38,6 @@ module.exports = {
                 .catch(() => {});
             if (!searchResult || !searchResult.tracks.length)
                 return void interaction.followUp(createEmbed('🧐', 'Không có kết quả tìm kiếm!', '', true));
-
-            const queue = useQueue(interaction.guild.id);
 
             searchResult.playlist
                 ? queue.node.insert(searchResult.tracks, 0)

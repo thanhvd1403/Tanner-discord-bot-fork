@@ -16,7 +16,8 @@ module.exports = {
         if (queue != null) {
             const trimString = (str, max) => (str.length > max ? `${str.slice(0, max - 3)}...` : str);
 
-            let queueStr = `🎼\u1CBC**Tiếp theo:**\n`;
+            let queueStr = `🎧\u1CBCĐang phát: **${queue.currentTrack.cleanTitle} - ${queue.currentTrack.author}**\n`;
+            queueStr += `🎼\u1CBC**Tiếp theo:**\n`;
 
             // Build queue list
             queue.tracks.data.forEach((track, index) => {
@@ -26,9 +27,9 @@ module.exports = {
             return void interaction.reply({
                 embeds: [
                     {
-                        title: `🎧\u1CBCĐang phát: **${queue.currentTrack.cleanTitle} - ${queue.currentTrack.author}**`,
                         description: trimString(queueStr, 4095),
                         color: 0x893f3f,
+                        epherial: true,
                     },
                 ],
             });
